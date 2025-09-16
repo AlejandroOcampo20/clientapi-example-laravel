@@ -32,7 +32,7 @@
                     <td>{{ $order['legalization_date'] }}</td>
                     <td>{{ $order['address'] }}</td>
                     <td>{{ $order['city'] }}</td>
-                    <td>{{ $order->causal->description }}</td>
+                    <td>{{ $order['causal']['description'] }}</td>
                     <td>@if ($order->observation){{ $order->observation->description }} @endif</td>
                     <td>
                         <a href="{{ route('order.edit', $order["id"]) }}"  class="btn btn-primary btn-circle btn-sm" title="Editar">

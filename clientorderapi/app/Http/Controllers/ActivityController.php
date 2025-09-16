@@ -16,10 +16,10 @@ class ActivityController extends Controller
     {
         $token = Session::get('token');
         $url = env('URL_BASE_API', "http://localhost:8000");
-        $response = Http::acceptJson()->withToken($token)->get($url . '/technician');
+        $response = Http::acceptJson()->withToken($token)->get($url . '/activity');
         if ($response->successful()) {
-            $technicians = $response->json();
-            return View('technician.index', compact('technicians'));
+            $activities = $response->json();
+            return View('activity.index', compact('activities'));
         } else {
             abort($response->status());
         }
@@ -58,7 +58,7 @@ class ActivityController extends Controller
             return redirect()->route('activity.index');
         } elseif ($response->status() == Response::HTTP_BAD_REQUEST) {
             $errors = $response->json('errors');
-            return redirect()->route('type_activity.create')->withErrors($errors)->withInput();
+            return redirect()->route('activity.create')->withErrors($errors)->withInput();
         } else {
             abort($response->status());
         }
