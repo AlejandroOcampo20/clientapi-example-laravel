@@ -128,6 +128,22 @@ class TypeActivityController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $url = env('URL_BASE_API', "http://localhost:8000");
+        $response = Http::acceptJson()->withToken(Session::get('token'))->delete($url . '/type_activity/' . $id);
+        if($response->successful())
+        {
+            session()->flash('message','Registro eliminado exitosamente');
+            return redirect()->route('type_activity.index');
+        }
+        elseif($response->status() == Response::HTTP_BAD_REQUEST)
+        {
+            $errors = $response->json()['errors'];
+            return redirect()->route('type_activity.index')->withInput()->withErrors($errors);
+        }
+        else
+        {
+            abort($response->status());
+        }
+          
     }
 }
