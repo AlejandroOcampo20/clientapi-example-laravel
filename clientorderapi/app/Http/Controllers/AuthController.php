@@ -19,6 +19,7 @@ class AuthController extends Controller
         {
             return redirect()->route('index');
         }
+        
         return view('auth.login');
     }
 
@@ -71,14 +72,14 @@ class AuthController extends Controller
     }
 
     /**
-     * Login users
+     * login de usuarios
      */
     public function login(Request $request)
     {
-        //url = url_base + /endpoint_servicio
+        //ulr = url_base + /endpoint_servicio
         $url = env('URL_BASE_API', "http://localhost:8000");
-        $response = Http::acceptJson()->post($url . '/auth/login' , [
-            'email' => $request->email,
+        $response = Http::acceptJson()->post($url . '/auth/login', [
+            'email' => $request->email, //$request['email']
             'password' => $request->password
         ]);
 
@@ -93,12 +94,12 @@ class AuthController extends Controller
         {
             return back()->withErrors([
                 'email' => 'Credenciales incorrectas'
-            ])->onlyInput('email');
-        }
+            ])->onlyInput('email'); 
+        }          
     }
 
     /**
-     * Logouot users
+     * cerrar sesión del usuario
      */
     public function logout(Request $request)
     {
@@ -106,7 +107,7 @@ class AuthController extends Controller
         {
             $token = Session::get('token');
             $url = env('URL_BASE_API', "http://localhost:8000");
-            $response = Http::acceptJson()->withToken($token)->post($url . '/auth/login');
+            $response = Http::acceptJson()->withToken($token)->post($url . '/auth/logout');
             if($response->status() == Response::HTTP_OK)
             {
                 Session::flush();
@@ -116,8 +117,10 @@ class AuthController extends Controller
         }
         else
         {
-            session()->flash('warning', 'No has iniciado sesion');
+            session()->flash('warning', 'No has iniciado una sesión');
             return view('auth.index');
         }
+
+        
     }
 }
